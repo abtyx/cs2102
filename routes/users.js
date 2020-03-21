@@ -1,17 +1,14 @@
-var pgp = require('pg-promise')({})
-var db = pgp('postgres://ash:burn@localhost:5432/customers')
+const db = require('../utils/db');
 
-var express = require('express');
-var router = express.Router();
+module.exports.users = async function(req, res) {
+  const result = await db.any('SELECT * FROM users;');
+  res.send(result);
+};
 
-/* GET users listing. */
-router.get('/:name', function(req, res, next) {
-  const id = req.params.name;
-  db.any('SELECT * FROM names WHERE id = $1', id)
-  .then(function (data) {
-    console.log('DATA:', data[0].name)
-    res.send(data);
-  })
-});
-
-module.exports = router;
+module.exports.user = async function(req, res) {
+  const result = await db.one(
+    'SELECT * FROM users WHERE id = $1;',
+    req.params.id
+  );
+  res.send(result);
+};
