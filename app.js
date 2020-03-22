@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const bodyParser = require("body-parser");
 
 var indexRouter = require("./routes/index");
 const seedDb = require("./utils/seed");
@@ -18,6 +19,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+const jsonParser = bodyParser.json();
+app.use(jsonParser);
 
 app.use("/", indexRouter);
 
@@ -37,8 +41,12 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-seedDb().then(_ => {
-  console.log("Database seeded.");
+seedDb().then(isSuccess => {
+  if (isSuccess) {
+    console.log("Database seeded.");
+  } else {
+    console.error("Database seed failed.");
+  }
 });
 
 module.exports = app;
