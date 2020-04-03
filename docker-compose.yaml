@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   app:
     build: .
@@ -9,13 +9,10 @@ services:
       NODE_ENV: development
       PORT: 3000
     ports:
-      - '3000:3000'
-    command: npm start
-    environment:
-      PORT: 3000
+      - "3000:3000"
     volumes:
       - .:/app/
-      - /app/node_modules
+      - ./node_modules/:/app/node_modules/
     networks:
       - default
     links:
@@ -28,7 +25,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     ports:
-      - '9999:5432'
+      - "9999:5432"
     networks:
       - default
 networks:
