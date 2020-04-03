@@ -25,7 +25,7 @@ CREATE TABLE "Categories" (
 
 CREATE TABLE "Orders" (
   "id" serial PRIMARY KEY,
-  "restId" varchar(128),
+  "restUsername" varchar(128),
   "custUsername" varchar(128),
   "riderUsername" varchar(128),
   "addressId" integer,
