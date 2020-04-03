@@ -1,6 +1,6 @@
 CREATE TABLE "Restaurants" (
-  "id" serial PRIMARY KEY,
-  "username" varchar(128),
+  "username" varchar(128) PRIMARY KEY,
+  "name" text,
   "minOrder" numeric(16, 2)
 );
 
@@ -11,7 +11,7 @@ CREATE TABLE "FoodItems" (
   "maxLimit" integer,
   "stock" integer,
   "availability" boolean,
-  "restId" integer
+  "restUsername" varchar(128)
 );
 
 CREATE TABLE "FoodItemBelongsTo" (
@@ -25,7 +25,7 @@ CREATE TABLE "Categories" (
 
 CREATE TABLE "Orders" (
   "id" serial PRIMARY KEY,
-  "restId" integer,
+  "restId" varchar(128),
   "custUsername" varchar(128),
   "riderUsername" varchar(128),
   "addressId" integer,
@@ -144,7 +144,7 @@ CREATE TABLE "ReturningCustomerPromotions" (
 
 CREATE TABLE "RestaurantPromotions" (
   "campaignCode" varchar(55) PRIMARY KEY,
-  "restId" integer,
+  "restUsername" varchar(128),
   "minOrder" numeric(16, 2)
 );
 
@@ -159,13 +159,13 @@ CREATE TABLE "Managers" (
 
 ALTER TABLE "Restaurants" ADD FOREIGN KEY ("username") REFERENCES "Users" ("username");
 
-ALTER TABLE "FoodItems" ADD FOREIGN KEY ("restId") REFERENCES "Restaurants" ("id");
+ALTER TABLE "FoodItems" ADD FOREIGN KEY ("restUsername") REFERENCES "Restaurants" ("username");
 
 ALTER TABLE "FoodItemBelongsTo" ADD FOREIGN KEY ("foodItemId") REFERENCES "FoodItems" ("id");
 
 ALTER TABLE "FoodItemBelongsTo" ADD FOREIGN KEY ("categoryName") REFERENCES "Categories" ("name");
 
-ALTER TABLE "Orders" ADD FOREIGN KEY ("restId") REFERENCES "Restaurants" ("id");
+ALTER TABLE "Orders" ADD FOREIGN KEY ("restId") REFERENCES "Restaurants" ("username");
 
 ALTER TABLE "Orders" ADD FOREIGN KEY ("custUsername") REFERENCES "Customers" ("username");
 
@@ -207,6 +207,6 @@ ALTER TABLE "ReturningCustomerPromotions" ADD FOREIGN KEY ("campaignCode") REFER
 
 ALTER TABLE "RestaurantPromotions" ADD FOREIGN KEY ("campaignCode") REFERENCES "PromotionCampaigns" ("code");
 
-ALTER TABLE "RestaurantPromotions" ADD FOREIGN KEY ("restId") REFERENCES "Restaurants" ("id");
+ALTER TABLE "RestaurantPromotions" ADD FOREIGN KEY ("restUsername") REFERENCES "Restaurants" ("username");
 
 ALTER TABLE "Managers" ADD FOREIGN KEY ("username") REFERENCES "Users" ("username");
