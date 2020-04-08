@@ -41,12 +41,4 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-seedDb().then(isSuccess => {
-  if (isSuccess) {
-    console.log("Database seeded.");
-  } else {
-    console.error("Database seed failed.");
-  }
-});
-
 module.exports = app;

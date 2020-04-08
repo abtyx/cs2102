@@ -1,5 +1,5 @@
-var pgp = require('pg-promise')({});
-const db = pgp('postgres://postgres:postgres@postgres/postgres');
+var pgp = require("pg-promise")({});
+const db = pgp("postgres://postgres:postgres@postgres/postgres");
 
 class Database {
   // Executes a query that returns a variable number of rows.
@@ -10,6 +10,11 @@ class Database {
   // Executes a query that returns one row.
   static one(query, parameters) {
     return db.one(query, parameters);
+  }
+
+  // Executes a query that returns one or no rows.
+  static oneOrNone(query, parameters) {
+    return db.oneOrNone(query, parameters);
   }
 
   // Executes a query that returns no rows.

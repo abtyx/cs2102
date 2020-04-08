@@ -5,6 +5,7 @@ const path = require("path");
 const seedDb = async () => {
   try {
     await seed("init");
+    await seed("triggers");
     // await seed("Users");
     // await seed("Managers");
     // await seed("Area");

@@ -1,50 +1,43 @@
 const db = require("../utils/db");
 
-module.exports.users = async function(req, res) {
-  const result = await db.any("SELECT * FROM users;");
-  res.send(result);
-};
-
-module.exports.user = async function(req, res) {
-  const result = await db.one(
-    "SELECT * FROM users WHERE id = $1;",
-    req.params.id
-  );
-  res.send(result);
-};
-
 module.exports.login = async function(req, res) {
   const { username, password } = req.body;
-  const result = await db.one(
+  const result = await db.oneOrNone(
     `
-    WITH ManagerUsers AS (
-      SELECT U.id, 'manager' AS type FROM Managers M INNER JOIN Users U
-      ON M.userId = U.id
+    WITH AuthenticatedUser AS (
+      SELECT username FROM Users
+      WHERE username = $1 AND password = $2
+    ),
+    ManagerUsers AS (
+      SELECT U.username, 'manager' AS userType FROM Managers M INNER JOIN AuthenticatedUser U
+      ON M.username = U.username
     ),
     RiderUsers AS (
-      SELECT U.id, 'rider' AS type FROM DeliveryRiders R INNER JOIN Users U
-      ON R.userId = U.id
+      SELECT U.username, 'rider' AS userType FROM DeliveryRiders R INNER JOIN AuthenticatedUser U
+      ON R.username = U.username
     ),
     RestaurantUsers AS (
-      SELECT U.id, 'restaurant' AS type FROM Restaurants R INNER JOIN Users U
-      ON R.userId = U.id
+      SELECT U.username, 'restaurant' AS userType FROM Restaurants R INNER JOIN AuthenticatedUser U
+      ON R.username = U.username
     ),
     CustomerUsers AS (
-      SELECT U.id, 'customer' AS type FROM Customers C INNER JOIN Users U
-      ON C.userId = U.id
-    ),
-    UserId AS (
-      SELECT id FROM Users WHERE username = $1 AND password = $2 LIMIT 1
+      SELECT U.username, 'customer' AS userType FROM Customers C INNER JOIN AuthenticatedUser U
+      ON C.username = U.username
     )
-    SELECT UI.id, type as userType FROM ManagerUsers MU INNER JOIN UserId UI ON MU.id = UI.id
+    SELECT * FROM ManagerUsers
     UNION
-    SELECT UI.id, type as userType FROM CustomerUsers CU INNER JOIN UserId UI ON CU.id = UI.id
+    SELECT * FROM RiderUsers
     UNION
-    SELECT UI.id, type as userType FROM RiderUsers RU INNER JOIN UserId UI ON RU.id = UI.id
+    SELECT * FROM RestaurantUsers
     UNION
-    SELECT UI.id, type as userType FROM RestaurantUsers RU INNER JOIN UserId UI ON RU.id = UI.id
+    SELECT * FROM CustomerUsers;
     `,
     [username, password]
   );
+
+  if (!result) {
+    res.sendStatus(400);
+    return;
+  }
   res.send(result);
 };
