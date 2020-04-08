@@ -9,6 +9,8 @@ const managerHandlers = require("./managers");
 const riderHandlers = require("./riders");
 const foodItemHandlers = require("./fooditems");
 const adminHandlers = require("./admin");
+const restAdminHandlers = require("./restaurant-admin");
+const riderAdminHandlers = require("./rider-admin");
 
 // Customer handlers
 router.get("/customers", wrap(customerHandlers.getCustomers));
@@ -52,6 +54,26 @@ router.get(
 );
 router.get("/admin/area-summary/", wrap(adminHandlers.getAreaSummary));
 router.get("/admin/rider/:username", wrap(adminHandlers.getRiderSummary));
+
+// Restaurant Admin handlers
+router.get(
+  "/restaurant-admin/summary/:username",
+  wrap(restAdminHandlers.getRestaurantSummary)
+);
+router.get(
+  "/restaurant-admin/promotions/:username",
+  wrap(restAdminHandlers.getRestaurantPromotions)
+);
+router.get(
+  "/restaurant-admin/promotions/:username/:promoCode",
+  wrap(restAdminHandlers.getRestaurantPromotions)
+);
+
+// Rider Admin handlers
+router.get(
+  "/rider-admin/summary/:username",
+  wrap(riderAdminHandlers.getRiderSummary)
+);
 
 // Seed handler -- for debug purposes
 router.get("/seed", wrap(seedDbHandler));
