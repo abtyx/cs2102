@@ -4,8 +4,9 @@ module.exports.getRiderSummary = async function(req, res) {
   const { month, year } = req.query;
   const { username } = req.params;
 
-  const result = await db.one(
-    `
+  try {
+    const result = await db.one(
+      `
     WITH OrdersDelivered AS (
       SELECT *
       FROM Orders
@@ -37,8 +38,11 @@ module.exports.getRiderSummary = async function(req, res) {
       SELECT * FROM TotalSalary
     ) AS totalSalary;
   `,
-    { month, year, username }
-  );
-
-  res.send(result);
+      { month, year, username }
+    );
+    res.send(result);
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
 };

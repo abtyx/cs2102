@@ -3,22 +3,22 @@
 CREATE OR REPLACE FUNCTION check_orderitems() RETURNS TRIGGER
   AS $$
 DECLARE
-  restaurantId INTEGER;
-  foodRestaurantId INTEGER;
+  restaurantUsername VARCHAR(128);
+  foodRestaurantUsername VARCHAR(128);
 BEGIN
-  restaurantId := (
-    SELECT restId FROM Orders
+  restaurantUsername:= (
+    SELECT restUsername FROM Orders
     WHERE id = NEW.orderId
     LIMIT 1
   );
 
-  foodRestaurantId := (
-    SELECT restId FROM FoodItems
+  foodRestaurantUsername := (
+    SELECT restUsername FROM FoodItems
     WHERE id = NEW.foodId
     LIMIT 1
   );
 
-  IF restaurantId = foodRestaurantId THEN
+  IF restaurantUsername = foodRestaurantUsername THEN
     RETURN NEW;
   END IF;
   RETURN NULL;
@@ -87,7 +87,8 @@ DECLARE
 BEGIN
   IF check_start_end_hours(NEW.startDate, NEW.endDate) AND
     check_hours_on_same_day(NEW.startDate, NEW.endDate) AND
-    is_within_working_hours(NEW.startDate, NEW.endDate) THEN
+    is_within_working_hours(NEW.startDate) AND
+    is_within_working_hours(NEW.endDate) THEN
 
     shouldAdd := (WITH SameDayWorkshifts AS (
       SELECT startDate, endDate, 
@@ -141,7 +142,7 @@ DECLARE
 BEGIN
   isFulltime := (
     SELECT EXISTS(
-      SELECT 1 FROM FullTimeRiders WHERE riderUsername = NEW.username
+      SELECT 1 FROM FullTimeRiders WHERE riderUsername = NEW.riderUsername
     )
   );
 

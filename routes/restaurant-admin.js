@@ -104,8 +104,8 @@ module.exports.getRestaurantPromotion = async function(req, res) {
         SELECT COUNT(*)
         FROM Orders
         WHERE restUsername = $1
-        AND timeCreated >= RP.startDate
-        AND timeCreated <= RP.endDate
+        AND timeCreated >= PC.startDate
+        AND timeCreated <= PC.endDate
       ) AS orderCount
     FROM RestaurantPromotions RP
     INNER JOIN PromotionCampaigns PC

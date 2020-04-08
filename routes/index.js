@@ -66,7 +66,7 @@ router.get(
 );
 router.get(
   "/restaurant-admin/promotions/:username/:promoCode",
-  wrap(restAdminHandlers.getRestaurantPromotions)
+  wrap(restAdminHandlers.getRestaurantPromotion)
 );
 
 // Rider Admin handlers
@@ -76,6 +76,7 @@ router.get(
 );
 
 // Seed handler -- for debug purposes
-router.get("/seed", wrap(seedDbHandler));
+router.get("/init", wrap(seedDbHandler.initialize));
+router.get("/seed", wrap(seedDbHandler.seed));
 
 module.exports = router;
