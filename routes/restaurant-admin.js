@@ -77,8 +77,8 @@ module.exports.getRestaurantPromotions = async function(req, res) {
   const { username } = req.params;
   const result = await db.any(
     `
-    SELECT PC.code, RP.restUsername, RP.minOrder, PC.name,
-      PC.description, PC.startDate, PC.endDate,
+    SELECT PC.code, RP.restUsername as "restUsername", RP.minOrder as "minOrder", PC.name,
+      PC.description, PC.startDate as "startDate", PC.endDate as "endDate",
       D.type, D.value
     FROM RestaurantPromotions RP
     INNER JOIN PromotionCampaigns PC
@@ -97,8 +97,8 @@ module.exports.getRestaurantPromotion = async function(req, res) {
   const { username, promoCode } = req.params;
   const result = await db.oneOrNone(
     `
-    SELECT PC.code, RP.restUsername, RP.minOrder, PC.name,
-      PC.description, PC.startDate, PC.endDate,
+    SELECT PC.code, RP.restUsername as "restUsername", RP.minOrder as "minOrder", PC.name,
+      PC.description, PC.startDate as "startDate", PC.endDate as "endDate",
       D.type, D.value,
       (
         SELECT COUNT(*)
@@ -106,14 +106,14 @@ module.exports.getRestaurantPromotion = async function(req, res) {
         WHERE restUsername = $1
         AND timeCreated >= PC.startDate
         AND timeCreated <= PC.endDate
-      ) AS orderCount
+      ) AS "orderCount"
     FROM RestaurantPromotions RP
     INNER JOIN PromotionCampaigns PC
     ON RP.campaignCode = PC.code
     INNER JOIN Discounts D
     ON PC.discountId = D.id
-    WHERE restUsername = $1 AND
-        PC.code = $2;
+    WHERE restUsername = $1
+    AND PC.code = $2;
   `,
     [username, promoCode]
   );

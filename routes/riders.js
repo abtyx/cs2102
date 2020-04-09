@@ -128,7 +128,6 @@ module.exports.updateRider = async function(req, res) {
     contact,
     salary
   };
-
   await db.tx(t => {
     const updateTxs = [];
     if (password) {

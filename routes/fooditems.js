@@ -31,12 +31,15 @@ module.exports.foodSearch = async function(req, res) {
       FROM FoodItemBelongsTo
       WHERE categoryName = $2
     )
-    SELECT id, name, price, maxLimit, stock, restUsername
-    FROM QueryFood
+    SELECT F.id, F.name, F.price, F.maxLimit as "maxLimit", F.stock, R.username as "restUsername", R.name as "restName"
+    FROM QueryFood F
+    INNER JOIN 
+    Restaurants R
+    ON R.username = F.restUsername
     WHERE EXISTS (
       SELECT 1
       FROM CategoryFood
-      WHERE foodItemId = QueryFood.id
+      WHERE foodItemId = F.id
     );
   `,
     [query, category]

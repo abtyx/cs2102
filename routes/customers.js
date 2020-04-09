@@ -34,8 +34,10 @@ module.exports.getCustomer = async function(req, res) {
       SELECT 
         O.id,
         O.restUsername,
+        R.name as "restName",
         O.custUsername,
         O.riderUsername,
+        DR.name as "riderName",
         A.address,
         A.areaName,
         O.promotionCode,
@@ -54,16 +56,25 @@ module.exports.getCustomer = async function(req, res) {
       FROM Orders O
       INNER JOIN Addresses A
       ON O.addressId = A.id
+      INNER JOIN Restaurants R
+      ON O.restUsername = R.username
+      INNER JOIN DeliveryRiders DR
+      ON O.riderUsername = DR.username
       LEFT JOIN RestaurantReviews RR
       ON O.id = RR.orderId
       LEFT JOIN RiderReviews RRT
-      ON O.id = RRT.orderId;
-    `
+      ON O.id = RRT.orderId
+      WHERE O.custUsername = $1
+      ORDER BY O.timeCreated DESC
+      LIMIT 10;
+    `,
+    username
   );
 
   const serializedOrders = orderAndReviews.map(order => ({
     id: order.id,
-    restUsername: order.restusername,
+    restName: order.restName,
+    riderName: order.riderName,
     custUsername: order.custusername,
     address: order.address,
     areaName: order.areaname,
