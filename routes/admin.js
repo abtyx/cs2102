@@ -25,25 +25,19 @@ module.exports.getAdminSummary = async function(req, res) {
         WHERE OrderItems.orderId = id
       ) 
     )
-    SELECT NCC.count as newCustomerCount, COUNT(*), SUM(MOI.qty * MOI.pricePerQty) as totalCost
-    FROM NewCustomerCount NCC, MonthOrders MO, MonthOrderItems MOI
-    GROUP BY NCC.count, MOI.OrderId
+    SELECT (
+      SELECT count AS "newCustomerCount" FROM NewCustomerCount
+    ), (
+      SELECT COUNT(*) AS "orderCount" FROM MonthOrders
+    ), COALESCE(SUM(MOI.qty * MOI.pricePerQty), 0) as "totalCost"
+    FROM MonthOrderItems MOI
   `,
     [month, year]
   );
 
-  if (!result) {
-    res.send({
-      newCustomerCount: 0,
-      orderCount: 0,
-      totalOrderCost: "0.00"
-    });
-    return;
-  }
-
   res.send({
-    newCustomerCount: result.newcustomercount,
-    orderCount: result.count,
+    newCustomerCount: result.newCustomerCount,
+    orderCount: result.orderCount,
     totalOrderCost: result.totalCost
   });
 };
@@ -70,7 +64,9 @@ module.exports.getCustomerInformation = async function(req, res) {
         WHERE OrderItems.orderId = id
       ) 
     )
-    SELECT (SELECT COUNT(*) FROM OrdersByCust) AS count, COALESCE(SUM(qty * pricePerQty), 0) AS totalCost
+    SELECT 
+      (SELECT COUNT(*) FROM OrdersByCust) AS "orderCount", 
+      COALESCE(SUM(qty * pricePerQty), 0) AS "totalCost"
     FROM OrderItemsByCust;
   `,
     [username, month, year]
@@ -141,19 +137,19 @@ module.exports.getRiderSummary = async function(req, res) {
     )
     SELECT (
       SELECT COUNT(*) FROM OrdersDelivered
-    ) AS ordersDelivered,
+    ) AS "ordersDelivered",
     (
       SELECT * FROM TotalWorkHours
-    ) AS TotalWorkHours,
+    ) AS "totalWorkHours",
     (
       SELECT * FROM TotalSalary
-    ) AS totalSalary,
+    ) AS "totalSalary",
     (
       SELECT COALESCE(AVG(EXTRACT(MINUTE FROM timeDelivered - timeCreated)), 0)
       FROM OrdersDelivered
-    ) AS averageDeliveryTime,
-    count as ratingCount,
-    avg as averageRating
+    ) AS "averageDeliveryTime",
+    count as "ratingCount",
+    avg as "averageRating"
     FROM RatingsReceived;
   `,
     { month, year, username }

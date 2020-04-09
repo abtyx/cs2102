@@ -2,7 +2,7 @@ const db = require("../utils/db");
 
 module.exports.getRestaurants = async function(req, res) {
   const result = await db.any(`
-    SELECT username, name, minOrder
+    SELECT username, name, minOrder as "minOrder"
     FROM Restaurants;
   `);
 
@@ -21,7 +21,7 @@ module.exports.getRestaurant = async function(req, res) {
       SELECT 
         username, 
         name, 
-        minOrder
+        minOrder as "minOrder"
       FROM Restaurants
       WHERE username = $1
     `,
@@ -39,7 +39,7 @@ module.exports.getRestaurant = async function(req, res) {
         id,
         name,
         price,
-        maxLimit,
+        maxLimit as "maxLimit",
         stock
       FROM FoodItems
       WHERE restUsername = $1
@@ -47,9 +47,42 @@ module.exports.getRestaurant = async function(req, res) {
     username
   );
 
+  const ordersAndReviews = await db.any(
+    `
+    SELECT
+      O.id,
+      O.status,
+      RR.description as "reviewDescription",
+      RR.rating as "reviewRating"
+    FROM Orders O
+    LEFT JOIN RestaurantReviews RR
+    ON O.id = RR.orderId
+    WHERE restUsername = $1;
+  `,
+    username
+  );
+
+  for (let obj of ordersAndReviews) {
+    const orderItems = await db.any(
+      `
+      SELECT
+        foodId as "foodId",
+        orderId as "orderId",
+        qty,
+        pricePerQty as "pricePerQty"
+      FROM OrderItems
+      WHERE orderId = $1;
+    `,
+      obj.id
+    );
+
+    obj.orderItems = orderItems;
+  }
+
   res.send({
     ...restaurant,
-    foodItems
+    foodItems,
+    orders: ordersAndReviews
   });
 };
 

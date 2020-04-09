@@ -5,7 +5,7 @@ module.exports.getRiders = async function(req, res) {
     WITH FullTimers AS (
       SELECT DR.username, 
         DR.name, 
-        DR.bankAccount, 
+        DR.bankAccount as "bankAccount", 
         DR.contact,
         FR.monthlyBaseSalary as salary,
         'fulltime' AS type
@@ -16,7 +16,7 @@ module.exports.getRiders = async function(req, res) {
     PartTimers AS (
       SELECT DR.username, 
         DR.name, 
-        DR.bankAccount, 
+        DR.bankAccount as "bankAccount", 
         DR.contact,
         PR.weeklyBaseSalary as salary,
         'parttime' AS type
@@ -44,7 +44,7 @@ module.exports.getRider = async function(req, res) {
       WITH FullTimers AS (
         SELECT DR.username, 
           DR.name, 
-          DR.bankAccount, 
+          DR.bankAccount as "bankAccount", 
           DR.contact,
           FR.monthlyBaseSalary as salary,
           'fulltime' AS type
@@ -56,7 +56,7 @@ module.exports.getRider = async function(req, res) {
       PartTimers AS (
         SELECT DR.username, 
           DR.name, 
-          DR.bankAccount, 
+          DR.bankAccount as "bankAccount", 
           DR.contact,
           PR.weeklyBaseSalary as salary,
           'parttime' AS type
@@ -77,7 +77,43 @@ module.exports.getRider = async function(req, res) {
     return;
   }
 
-  res.send(rider);
+  const reviews = await db.any(
+    `
+    SELECT 
+      RR.description,
+      RR.rating
+    FROM Orders O
+    INNER JOIN RiderReviews RR
+    ON O.id = RR.orderId
+    WHERE O.riderUsername = $1;
+  `,
+    username
+  );
+
+  const workSchedules = await db.any(
+    `
+    SELECT id, startDate as "startDate", endDate as "endDate"
+    FROM WorkSchedules
+    WHERE riderUsername = $1;
+  `,
+    username
+  );
+
+  const wages = await db.any(
+    `
+    SELECT id, amount, isPaidOut as "isPaidOut", createdAt as "createdAt"
+    FROM Wages
+    WHERE riderUsername = $1;
+  `,
+    username
+  );
+
+  res.send({
+    ...rider,
+    reviews,
+    workSchedules,
+    wages
+  });
 };
 
 module.exports.updateRider = async function(req, res) {

@@ -2,7 +2,7 @@ const db = require("../utils/db");
 
 module.exports.getCustomers = async function(req, res) {
   const result = await db.any(`
-    SELECT username, name, loyaltyPoints, signupDate
+    SELECT username, name, loyaltyPoints as "loyaltyPoints", signupDate as "signupDate"
     FROM Customers;
   `);
   res.send(result);
@@ -15,20 +15,86 @@ module.exports.getCustomer = async function(req, res) {
     return;
   }
 
-  const result = await db.oneOrNone(
+  const customer = await db.oneOrNone(
     `
-      SELECT username, name, loyaltyPoints, signupDate
-      FROM Customers;
+      SELECT username, name, loyaltyPoints as "loyaltyPoints", signupDate as "signupDate"
+      FROM Customers
+      WHERE username = $1;
     `,
     username
   );
 
-  if (!result) {
+  if (!customer) {
     res.sendStatus(404);
     return;
   }
 
-  res.send(result);
+  const orderAndReviews = await db.any(
+    `
+      SELECT 
+        O.id,
+        O.restUsername,
+        O.custUsername,
+        O.riderUsername,
+        A.address,
+        A.areaName,
+        O.promotionCode,
+        O.timeCreated,
+        O.fee,
+        O.status,
+        O.timeCollection,
+        O.timeArrival,
+        O.timeDeparture,
+        O.timeDelivered,
+        O.modeOfPayment,
+        RR.description AS restaurantReviewDescription,
+        RR.rating AS restaurantReviewRating,
+        RRT.description AS riderReviewDescription,
+        RRT.rating AS riderReviewRating
+      FROM Orders O
+      INNER JOIN Addresses A
+      ON O.addressId = A.id
+      LEFT JOIN RestaurantReviews RR
+      ON O.id = RR.orderId
+      LEFT JOIN RiderReviews RRT
+      ON O.id = RRT.orderId;
+    `
+  );
+
+  const serializedOrders = orderAndReviews.map(order => ({
+    id: order.id,
+    restUsername: order.restusername,
+    custUsername: order.custusername,
+    address: order.address,
+    areaName: order.areaname,
+    promotionCode: order.promotionCode,
+    timeCreated: order.timecreated,
+    timeCollection: order.timecollection,
+    timeDeparture: order.timedeparture,
+    timeDelivered: order.timedelivered,
+    fee: order.fee,
+    status: order.status,
+    modeOfPayment: order.modeofpayment,
+    restaurantReview:
+      order.restaurantreviewrating !== null
+        ? {
+            description: order.restaurantreviewdescription,
+            rating: order.restaurantreviewrating
+          }
+        : null,
+    riderReview:
+      order.riderreviewrating !== null
+        ? {
+            description: order.riderreviewdescription,
+            rating: order.riderreviewrating
+          }
+        : null
+  }));
+
+  res.send({
+    ...customer,
+    orders: serializedOrders
+  });
 };
 
 module.exports.createCustomer = async function(req, res) {
