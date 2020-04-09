@@ -12,7 +12,8 @@ module.exports.getManager = async function(req, res) {
   const username = req.params.username;
   const result = await db.oneOrNone(
     `
-      SELECT username FROM Managers;
+      SELECT username FROM Managers
+      WHERE username = $1;
     `,
     username
   );
@@ -87,4 +88,6 @@ module.exports.deleteManager = async function(req, res) {
     `,
     username
   );
+
+  res.send("OK");
 };

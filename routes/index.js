@@ -12,6 +12,10 @@ const adminHandlers = require("./admin");
 const restAdminHandlers = require("./restaurant-admin");
 const riderAdminHandlers = require("./rider-admin");
 
+// Helpers
+router.get("/areas", wrap(foodItemHandlers.getAreas));
+router.get("/categories", wrap(foodItemHandlers.getCategories));
+
 // Customer handlers
 router.get("/customers", wrap(customerHandlers.getCustomers));
 router.get("/customers/:username", wrap(customerHandlers.getCustomer));

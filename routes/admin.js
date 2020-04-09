@@ -131,7 +131,7 @@ module.exports.getRiderSummary = async function(req, res) {
     RatingsReceived AS (
       SELECT COUNT(*), COALESCE(AVG(rating), 0) AS avg
       FROM RiderReviews RR
-      INNER JOIN Orders O
+      INNER JOIN OrdersDelivered O
       ON RR.orderId = O.id
       WHERE O.riderUsername = $(username)
     )

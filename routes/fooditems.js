@@ -1,5 +1,21 @@
 const db = require("../utils/db");
 
+module.exports.getCategories = async function(req, res) {
+  const result = await db.any(`
+    SELECT * FROM Categories;
+  `);
+
+  res.send(result);
+};
+
+module.exports.getAreas = async function(req, res) {
+  const result = await db.any(`
+    SELECT * FROM Area;
+  `);
+
+  res.send(result);
+};
+
 module.exports.foodSearch = async function(req, res) {
   const { query, category } = req.query;
 

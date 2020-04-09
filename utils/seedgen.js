@@ -190,7 +190,7 @@ const TOTAL_USER_COUNT =
   RESTAURANT_COUNT;
 
 const PROMO_COUNT = 1000;
-const ORDER_COUNT = 1000;
+const ORDER_COUNT = 10000;
 
 const generate = async () => {
   // seed with tables first
@@ -649,7 +649,7 @@ const generate = async () => {
 
   const orders = [];
   const riders = ftRiders.concat(ptRiders);
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < ORDER_COUNT; i++) {
     const rest = faker.random.arrayElement(rests);
     const rider = faker.random.arrayElement(riders);
     const customer = faker.random.arrayElement(customers);
