@@ -1,7 +1,7 @@
 const faker = require("faker");
 const mom = require("moment");
 const db = require("./db");
-const seedDb = require("./seed");
+const initDb = require("./seed");
 
 const fmtTimestamp = date => mom(date).format("YYYY-MM-DD HH:mm:ss");
 const fmtDate = date => mom(date).format("YYYY-MM-DD");
@@ -194,7 +194,7 @@ const ORDER_COUNT = 1000;
 
 const generate = async () => {
   // seed with tables first
-  await seedDb();
+  await initDb();
   console.log("DB wiped and re-initialized.");
 
   // Generate users
