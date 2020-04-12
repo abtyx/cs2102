@@ -1,5 +1,5 @@
 var pgp = require("pg-promise")({});
-const db = pgp("postgres://postgres:postgres@postgres/postgres");
+const db = pgp(process.env.DATABASE_URL);
 
 class Database {
   // Executes a query that returns a variable number of rows.

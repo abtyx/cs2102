@@ -1,0 +1,14 @@
+{
+  "search.exclude": {
+    "**/dist/**": true
+  },
+  "files.exclude": {
+    "**/dist/**": true
+  },
+  "editor.acceptSuggestionOnEnter": "off",
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "files.watcherExclude": {
+    "**/dist": true,
+    "**/dist/**": true
+  }
+}

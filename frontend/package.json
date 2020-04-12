@@ -1,0 +1,52 @@
+{
+  "name": "project-frontend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "browserslist": [
+    "last 3 Chrome versions"
+  ],
+  "scripts": {
+    "dev": "concurrently \"parcel index.html\" \"json-server --watch mock-db.js --port 8123\"",
+    "mockdb": "json-server --watch mock-db.js --port 8123",
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-pro": "^5.12.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.27",
+    "@fortawesome/pro-regular-svg-icons": "^5.12.1",
+    "@fortawesome/react-fontawesome": "^0.1.8",
+    "axios": "^0.19.2",
+    "bulma": "^0.8.0",
+    "classnames": "^2.2.6",
+    "framer-motion": "^1.10.0",
+    "mobx": "^5.15.4",
+    "mobx-react": "^6.1.8",
+    "moment": "^2.24.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-hot-loader": "^4.12.19",
+    "react-router-dom": "^5.1.2",
+    "styled-components": "^5.0.1",
+    "uuid": "^7.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-react": "^7.8.3",
+    "babel-eslint": "^10.0.3",
+    "debug": "^4.1.1",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-react": "^7.18.3",
+    "parcel-bundler": "^1.12.4",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1",
+    "sass": "^1.25.0"
+  }
+}
