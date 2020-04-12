@@ -3,7 +3,8 @@
 ### Requirements
 
 1. Install `docker` and `docker-compose`
-2. Install Postman (Optional, but useful for querying)
+2. Install `yarn`
+3. Install Postman (Optional, but useful for querying)
 
 ### Quickstart
 
