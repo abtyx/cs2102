@@ -75,6 +75,26 @@ module.exports.getCustomerInformation = async function(req, res) {
   res.send(result);
 };
 
+module.exports.getHotspots = async function(req, res) {
+  const { hour, area } = req.query;
+  const result = await db.one(
+    `
+    WITH QueriedOrders AS (
+      SELECT *
+      FROM Orders
+      Where EXTRACT(HOUR FROM timeCreated) = $1
+    )
+    SELECT COUNT(*) FROM QueriedOrders QO
+    INNER JOIN Addresses A
+    ON QO.addressId = A.id
+    WHERE A.areaName = $2
+  `,
+    [hour, area]
+  );
+
+  res.send(result);
+};
+
 module.exports.getAreaSummary = async function(req, res) {
   // date in 'YYYY-MM-DD' format
   // hour in 0-24 format

@@ -38,11 +38,12 @@ const CustomerView = observer(() => {
   };
 
   const saveCallback = () => {
-    updateCustomer({
+    const updateObj = {
       username,
-      password,
+      password: password ? password : undefined,
       name,
-    }).then(() => {
+    };
+    updateCustomer(updateObj).then(() => {
       getCustomer(username).then(result => {
         customerStore.updateCustomer(result);
         setEditMode(false);

@@ -13,6 +13,7 @@ const FoodSearchPage = () => {
     getCategories().then(result => {
       foodSearchStore.replaceCategories(result);
       foodSearchStore.setCategoryIdx(0);
+      foodSearchStore.setPage(0);
     });
   }, []);
   useEffect(() => {
@@ -32,7 +33,7 @@ const FoodSearchPage = () => {
           searchTerm={foodSearchStore.searchTerm}
           setSearchTerm={foodSearchStore.setSearchTerm}
         />
-        <div className="select">
+        <div className="select m-l-md">
           <select
             value={foodSearchStore.categoryIdx}
             onChange={e => foodSearchStore.setCategoryIdx(e.target.value)}
@@ -45,12 +46,24 @@ const FoodSearchPage = () => {
           </select>
         </div>
       </FlexCenter>
+      <div className="m-t-md m-b-md">
+        Showing results{' '}
+        {foodSearchStore.displayedItems.length === 0
+          ? 0
+          : foodSearchStore.pageNumber * foodSearchStore.numberPerPage + 1}{' '}
+        -{' '}
+        {foodSearchStore.pageNumber * foodSearchStore.numberPerPage +
+          foodSearchStore.displayedItems.length}
+        {foodSearchStore.searchTerm ? ` for '${foodSearchStore.searchTerm}'` : null} in the{' '}
+        {foodSearchStore.categories[foodSearchStore.categoryIdx]} category
+      </div>
       <PaginationView
-        data={foodSearchStore.results}
+        data={foodSearchStore.displayedItems}
         component={FoodSearchEntry}
-        page={foodSearchStore.page}
+        page={foodSearchStore.pageNumber}
         setPage={foodSearchStore.setPage}
-        totalPages={1}
+        keyMapper={item => item.id}
+        totalPages={foodSearchStore.pageCount}
       />
     </div>
   );

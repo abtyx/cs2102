@@ -137,7 +137,7 @@ module.exports.updateRestaurant = async function(req, res) {
 
 module.exports.createRestaurant = async function(req, res) {
   const { username, password, name, minOrder } = req.body;
-  if (!username || !name || !minOrder) {
+  if (!username || !name || minOrder === undefined) {
     res.sendStatus(400);
     return;
   }

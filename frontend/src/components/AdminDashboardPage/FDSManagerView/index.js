@@ -42,7 +42,11 @@ const FDSManagerView = observer(() => {
   };
 
   const saveCallback = () => {
-    updateStaff({ username, password }).then(() => {
+    const updateObj = {
+      username,
+      password: password ? password : undefined,
+    };
+    updateStaff(updateObj).then(() => {
       notifStore.pushNotification('Successfully updated staff.');
       setIsEditMode(false);
     });
@@ -51,6 +55,10 @@ const FDSManagerView = observer(() => {
   const renderBottomChild = () => {
     return <h1 className="title">{staff.username}</h1>;
   };
+
+  if (!staff) {
+    return null;
+  }
 
   return (
     <div>

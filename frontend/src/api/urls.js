@@ -42,6 +42,7 @@ export const GET_ADMIN_CUST_TMP = (username, month, year) =>
   `/admin/customer/${username}?month=${month}&year=${year}`;
 export const GET_AREA_SUMMARY_TMP = (area, hour, date) =>
   `/admin/area-summary?date=${date}&hour=${hour}&area=${area}`;
+export const GET_HOTSPOTS_TMP = (area, hour) => `/admin/hotspots?hour=${hour}&area=${area}`;
 export const GET_ADMIN_RIDER_TMP = (username, month, year) =>
   `/admin/rider/${username}?month=${month}&year=${year}`;
 

@@ -14,6 +14,8 @@ const HourPicker = ({ hour, onChange }) => {
         <option value="17">5pm</option>
         <option value="18">6pm</option>
         <option value="19">7pm</option>
+        <option value="20">8pm</option>
+        <option value="21">9pm</option>
       </select>
     </div>
   );

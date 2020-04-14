@@ -40,15 +40,21 @@ const RiderProfilePage = observer(() => {
   };
 
   const saveCallback = () => {
-    updateRider({ username, name, password, bankAccount, contact, salary: rider.salary }).then(
-      () => {
-        getRider(username).then(result => {
-          riderStore.updateRider(result);
-          notifStore.pushNotification('Successfully updated rider!');
-          setIsEditMode(false);
-        });
-      },
-    );
+    const updateObj = {
+      username,
+      name,
+      password: password ? password : undefined,
+      bankAccount,
+      contact,
+      salary: rider.salary,
+    };
+    updateRider(updateObj).then(() => {
+      getRider(username).then(result => {
+        riderStore.updateRider(result);
+        notifStore.pushNotification('Successfully updated rider!');
+        setIsEditMode(false);
+      });
+    });
   };
 
   const renderBottomChild = () => {

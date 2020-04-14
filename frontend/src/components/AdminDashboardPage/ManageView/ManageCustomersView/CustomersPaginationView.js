@@ -27,7 +27,8 @@ const CustomerView = ({ data: customer, index }) => (
       </figure>
       <div className="media-content">
         <small className="has-text-grey">
-          Registered at: {moment(customer.signupDate).format('YYYY-MM-DD HH:mm:ss')}
+          Registered: {moment.utc(customer.signupDate).format('YYYY-MM-DD HH:mm:ss')} (Customer for
+          {' ' + moment.utc(customer.signupDate).toNow(true)})
         </small>
         <p className="is-size-4">{customer.name}</p>
         <div>

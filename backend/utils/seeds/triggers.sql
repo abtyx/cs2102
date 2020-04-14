@@ -132,7 +132,6 @@ CREATE TRIGGER check_hours_trigger
 -- Checks for fulltime rider constraints:
 -- - Each work day needs have 2 4-hour shifts
 -- - Between the 2 shifts, there must be exactly a 1-hour break
--- - There must be 5 consecutive workdays in a week, no more, no less.
 CREATE OR REPLACE FUNCTION check_fulltime_rider_constraints() RETURNS TRIGGER
   AS $$
 DECLARE

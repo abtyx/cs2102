@@ -4,13 +4,15 @@ import {
   faCode,
   faCalendar,
   faDollarSign,
+  faSun,
 } from '@fortawesome/pro-regular-svg-icons';
 import React from 'react';
 import IconStat from '../../common/IconStat';
 import Field from '../../common/Field';
 import moment from 'moment';
+import { toTwoDec } from '../../../utils/fmt';
 
-const fmtTime = dt => moment.utc(dt).format('dddd, MMMM Do YYYY, h:mm:ss a');
+const fmtTime = dt => moment.utc(dt).format('MMMM Do YYYY, h:mm:ss a');
 const CampaignBodyView = ({ campaign }) => {
   const durationDays = moment(campaign.endDate).diff(moment(campaign.startDate), 'days', true);
 
@@ -19,15 +21,6 @@ const CampaignBodyView = ({ campaign }) => {
       <div className="columns has-text-centered">
         <div className="column">
           <Field icon={faCode} label="Code" value={campaign.code} />
-        </div>
-        <div className="column">
-          <Field
-            icon={faCalendar}
-            label="Active Period"
-            value={`${fmtTime(campaign.startDate)} - ${fmtTime(
-              campaign.endDate,
-            )} (${durationDays} days)`}
-          />
         </div>
         <div className="column">
           <Field
@@ -41,6 +34,17 @@ const CampaignBodyView = ({ campaign }) => {
       </div>
       <div className="columns">
         <div className="column">
+          <Field icon={faCalendar} label="Start Date" value={fmtTime(campaign.startDate)} />
+        </div>
+        <div className="column">
+          <Field icon={faCalendar} label="End Date" value={fmtTime(campaign.endDate)} />
+        </div>
+        <div className="column">
+          <Field icon={faSun} label="Duration" value={`${durationDays} days`} />
+        </div>
+      </div>
+      <div className="columns">
+        <div className="column">
           <IconStat
             icon={faFileInvoiceDollar}
             value={campaign.orderCount}
@@ -50,7 +54,7 @@ const CampaignBodyView = ({ campaign }) => {
         <div className="column">
           <IconStat
             icon={faPercent}
-            value={parseInt(campaign.orderCount) / durationDays}
+            value={`~${toTwoDec(parseInt(campaign.orderCount) / durationDays)}`}
             label="orders / day"
           />
         </div>

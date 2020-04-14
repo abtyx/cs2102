@@ -10,7 +10,6 @@ import {
   faMoneyBill,
 } from '@fortawesome/pro-regular-svg-icons';
 import React from 'react';
-import { toReadable } from '../../../utils/money';
 import Field from '../../common/Field';
 import FlexCenter from '../../common/FlexCenter';
 import IconStat from '../../common/IconStat';
@@ -50,7 +49,7 @@ const RiderBodyView = ({
     if (isEditMode) {
       return <LabelledField label="Salary" value={salary} onChange={setSalary} />;
     }
-    return <Field icon={faMoneyBill} label="Salary" value={rider.salary} />;
+    return <Field icon={faMoneyBill} label="Salary" value={'$' + rider.salary} />;
   };
   return (
     <>
@@ -62,12 +61,14 @@ const RiderBodyView = ({
       </div>
       <FlexCenter className="m-b-lg">
         <h2 className="title is-5 m-r-md m-b-none-i">Statistics for</h2>
-        <YearPicker
-          year={year}
-          yearMin={moment().year() - 10}
-          yearMax={moment().year()}
-          onChange={setYear}
-        />
+        <div className="m-r-md">
+          <YearPicker
+            year={year}
+            yearMin={moment().year() - 10}
+            yearMax={moment().year()}
+            onChange={setYear}
+          />
+        </div>
         <MonthPicker month={month} onChange={setMonth} />
       </FlexCenter>
       <div className="columns">
@@ -78,7 +79,11 @@ const RiderBodyView = ({
           <IconStat icon={faBriefcase} value={rider.totalWorkHours} label="hours worked" />
         </div>
         <div className="column">
-          <IconStat icon={faSackDollar} value={rider.totalSalary} label="salary earned" />
+          <IconStat
+            icon={faSackDollar}
+            value={`$${parseFloat(rider.totalSalary).toFixed(2)}`}
+            label="salary earned"
+          />
         </div>
         <div className="column">
           <IconStat icon={faSmile} value={rider.ratingCount} label="ratings received" />

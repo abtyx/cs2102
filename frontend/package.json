@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "concurrently \"parcel index.html\" \"json-server --watch mock-db.js --port 8123\"",
     "mockdb": "json-server --watch mock-db.js --port 8123",
-    "start": "parcel index.html",
+    "start": "parcel index.html --hmr-port 1235",
     "build": "parcel build index.html"
   },
   "dependencies": {

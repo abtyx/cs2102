@@ -30,7 +30,13 @@ const RestaurantBodyView = observer(
       if (isEditMode) {
         return <LabelledField label="Minimum Order ($)" value={minOrder} onChange={setMinOrder} />;
       }
-      return <Field icon={faPiggyBank} label="Minimum Order ($)" value={restaurant.minOrder} />;
+      return (
+        <Field
+          icon={faPiggyBank}
+          label="Minimum Order"
+          value={`$${toTwoDec(restaurant.minOrder)}`}
+        />
+      );
     };
 
     const renderUsername = () => {
@@ -62,13 +68,15 @@ const RestaurantBodyView = observer(
           : null}
         <FlexCenter className="m-b-lg m-t-lg">
           <h2 className="title is-5 m-r-md m-b-none-i">Statistics for</h2>
+          <div className="m-r-md">
+            <YearPicker
+              year={year}
+              yearMin={moment().year() - 10}
+              yearMax={moment().year()}
+              onChange={setYear}
+            />
+          </div>
           <MonthPicker month={month} onChange={setMonth} />
-          <YearPicker
-            year={year}
-            yearMin={moment().year() - 10}
-            yearMax={moment().year()}
-            onChange={setYear}
-          />
         </FlexCenter>
         <div className="columns">
           <div className="column">
@@ -78,7 +86,7 @@ const RestaurantBodyView = observer(
             <Field
               icon={faMoneyBill}
               label="Order Revenue"
-              value={toTwoDec(restaurant.totalCost)}
+              value={`$${toTwoDec(restaurant.totalCost)}`}
             />
           </div>
         </div>

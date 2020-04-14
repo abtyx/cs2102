@@ -6,8 +6,17 @@ class FoodSearchStore {
   @observable categoryIdx = -1;
   @observable searchTerm = '';
   @observable pageNumber = 0;
-  @computed get numberPerPage() {
-    return this.results.length;
+  @observable numberPerPage = 10;
+
+  @computed get pageCount() {
+    return Math.ceil(this.results.length / this.numberPerPage);
+  }
+
+  @computed get displayedItems() {
+    return this.results.slice(
+      this.pageNumber * this.numberPerPage,
+      (this.pageNumber + 1) * this.numberPerPage,
+    );
   }
 
   @computed get selectedCategory() {

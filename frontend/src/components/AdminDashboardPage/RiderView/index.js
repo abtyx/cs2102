@@ -82,6 +82,10 @@ const RiderView = observer(() => {
     return <h1 className="title">{rider.name}</h1>;
   };
 
+  if (!rider) {
+    return null;
+  }
+
   return (
     <EntityCard
       bgSrc={BackgroundImage}

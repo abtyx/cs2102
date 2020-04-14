@@ -60,7 +60,7 @@ const Sidebar = () => {
         item.to ? (
           <SidebarItem key={item.id} icon={item.icon} label={item.label} to={item.to} />
         ) : item.items ? (
-          <div className="p-md has-text-black">
+          <div className="p-md has-text-black" key={item.id}>
             <SidebarItem icon={item.icon} label={item.label} to={item.to} />
             {item.items.map(subitem => (
               <SidebarItem key={subitem.id} label={subitem.label} to={subitem.to} />

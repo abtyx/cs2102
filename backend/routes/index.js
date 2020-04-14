@@ -57,6 +57,7 @@ router.get(
   wrap(adminHandlers.getCustomerInformation)
 );
 router.get("/admin/area-summary/", wrap(adminHandlers.getAreaSummary));
+router.get("/admin/hotspots/", wrap(adminHandlers.getHotspots));
 router.get("/admin/rider/:username", wrap(adminHandlers.getRiderSummary));
 
 // Restaurant Admin handlers

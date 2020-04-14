@@ -141,6 +141,10 @@ export const getAdminAreaSummary = async (area, hour, date) => {
   return http.get(urls.GET_AREA_SUMMARY_TMP(area, hour, date));
 };
 
+export const getAdminAreaHotspots = async (area, hour) => {
+  return http.get(urls.GET_HOTSPOTS_TMP(area, hour));
+};
+
 export const getAdminRiderSummary = async (username, month, year) => {
   return http.get(urls.GET_ADMIN_RIDER_TMP(username, month, year));
 };

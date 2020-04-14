@@ -30,12 +30,14 @@ const CustomerBodyView = ({ customer, month, setMonth, year, setYear }) => {
       </div>
       <FlexCenter className="m-b-lg">
         <h2 className="title is-5 m-r-md m-b-none-i">Statistics for</h2>
-        <YearPicker
-          year={year}
-          yearMin={moment().year() - 10}
-          yearMax={moment().year()}
-          onChange={setYear}
-        />
+        <div className="m-r-md">
+          <YearPicker
+            year={year}
+            yearMin={moment().year() - 10}
+            yearMax={moment().year()}
+            onChange={setYear}
+          />
+        </div>
         <MonthPicker month={month} onChange={setMonth} />
       </FlexCenter>
       <div className="columns">
@@ -43,7 +45,11 @@ const CustomerBodyView = ({ customer, month, setMonth, year, setYear }) => {
           <IconStat icon={faFileInvoiceDollar} value={customer.orderCount} label="orders made" />
         </div>
         <div className="column">
-          <IconStat icon={faDollarSign} value={customer.totalCost} label="of order revenue" />
+          <IconStat
+            icon={faDollarSign}
+            value={`$${parseFloat(customer.totalCost).toFixed(2)}`}
+            label="of order revenue"
+          />
         </div>
       </div>
     </>

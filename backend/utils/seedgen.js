@@ -64,7 +64,7 @@ class User {
       name: this.name,
       username: this.username,
       bankAccount: faker.finance.account(),
-      contact: faker.phone.phoneNumber()
+      contact: faker.phone.phoneNumberFormat()
     };
   }
 
@@ -201,6 +201,35 @@ const generate = async () => {
   const users = [];
   for (let i = 0; i < TOTAL_USER_COUNT; i++) {
     users[i] = new User(i);
+    // create special user accounts
+    if (i === 0) {
+      // manager
+      users[i].name = "Adam";
+      console.log("Manager Account:");
+      console.log(`Username: ${users[i].username}`);
+      console.log(`Password: ${users[i].password}`);
+    } else if (i === MANAGER_COUNT) {
+      // Customer
+      users[i].name = "Bob";
+      console.log("Customer Account:");
+      console.log(`Username: ${users[i].username}`);
+      console.log(`Password: ${users[i].password}`);
+    } else if (i === MANAGER_COUNT + CUSTOMER_COUNT) {
+      // Delivery Rider: FT
+      users[i].name = "Carol";
+      console.log("Delivery Rider Account:");
+      console.log(`Username: ${users[i].username}`);
+      console.log(`Password: ${users[i].password}`);
+    } else if (
+      i ===
+      MANAGER_COUNT + CUSTOMER_COUNT + FT_RIDER_COUNT + PT_RIDER_COUNT
+    ) {
+      // Restaurant
+      users[i].name = "David";
+      console.log("Restaurant Account:");
+      console.log(`Username: ${users[i].username}`);
+      console.log(`Password: ${users[i].password}`);
+    }
   }
 
   await db.tx(t => {

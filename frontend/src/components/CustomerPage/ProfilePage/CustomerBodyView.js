@@ -76,13 +76,9 @@ const CustomerBodyView = ({
             <div className="m-b-md">
               <small className="has-text-grey">{`Order #${order.id}`}</small>
             </div>
-            <div className="level">
-              <div className="level-item">
-                <Field icon={faStore} label="Restaurant" value={order.restName} />
-              </div>
-              <div className="level-item">
-                <Field icon={faBiking} label="Rider" value={order.riderName} />
-              </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }} className="m-b-md">
+              <Field icon={faStore} label="Restaurant" value={order.restName} />
+              <Field icon={faBiking} label="Rider" value={order.riderName} />
             </div>
             <Field icon={faAddressBook} label="Address" value={order.address} />
             <Field icon={faClock} label="Time Ordered" value={fmtTime(order.timeCreated)} />
