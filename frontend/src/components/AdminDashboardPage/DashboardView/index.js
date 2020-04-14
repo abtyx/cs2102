@@ -55,7 +55,7 @@ const DashboardView = observer(() => {
     getAdminAreaHotspots(areaName, hour).then(result => {
       setHotspotCount(result.count);
     });
-  }, [area, hour, month, year, date]);
+  }, [area, hour, month, year, date, dashboardStore.areas]);
 
   useEffect(() => {
     getAdminSummary(month, year).then(result => {
